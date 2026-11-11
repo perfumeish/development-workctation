@@ -55,9 +55,9 @@ NGINX 기반 커스텀 웹 서버를 제작한 실습 프로젝트입니다.
 - [x] Git 저장소 초기화 및 작성자·기본 브랜치 설정
 - [x] VSCode에서 GitHub 로그인
 - [x] 제출용 터미널 로그의 이메일 마스킹
-- [ ] GitHub 원격 저장소 생성 및 소스 업로드
-- [ ] VSCode와 원격 저장소 연동 증거 저장
-- [ ] 제출 전 문서·로그·스크린샷 최종 점검
+- [x] GitHub 원격 저장소 생성 및 소스 업로드
+- [x] VSCode와 원격 저장소 연동 증거 저장
+- [x] 제출 전 문서·로그·스크린샷 최종 점검
 
 ## 터미널 조작 검증
 
@@ -649,3 +649,45 @@ VSCode 계정 메뉴에서 GitHub 로그인을 완료했습니다.
 - 커밋에는 GitHub에서 확인한 비공개 이메일을 사용합니다.
 - 토큰·비밀번호·개인키·인증 코드는 저장소에 올리지 않습니다.
 - GitHub 업로드 전에 문서·로그·스크린샷을 최종 점검합니다.
+
+## GitHub 원격 저장소 연동 결과
+
+제출 저장소:
+https://github.com/perfumeish/development-workctation
+
+로컬 과제 폴더 이름은 `development-workstation`이며,
+GitHub 저장소 이름은 `development-workctation`입니다.
+
+### 원격 연결 및 업로드 명령
+
+```powershell
+git remote add origin https://github.com/perfumeish/development-workctation.git
+git push -u origin main
+```
+
+업로드 결과:
+
+```text
+main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+### VSCode 터미널에서 연동 확인
+
+```powershell
+git remote -v
+git status -sb
+```
+
+결과:
+
+```text
+origin  https://github.com/perfumeish/development-workctation.git (fetch)
+origin  https://github.com/perfumeish/development-workctation.git (push)
+## main...origin/main
+```
+
+확인 당시 로컬 main과 원격 origin/main이 동기화되어 있었습니다.
+
+![VSCode에서 GitHub 원격 저장소 연동 확인](docs/vscode-github-remote.png)
+
