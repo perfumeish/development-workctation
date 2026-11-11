@@ -1,0 +1,458 @@
+﻿**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261112001405
+사용자 이름: LAPTOP-VRA0FQT7\Isac_Jung
+RunAs 사용자: LAPTOP-VRA0FQT7\Isac_Jung
+구성 이름: 
+Machine: LAPTOP-VRA0FQT7 (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 43680
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\docs\terminal-log.txt입니다.
+PS C:\Users\chlhj\development-workstation> Get-Location
+
+Path
+----
+C:\Users\chlhj\development-workstation
+
+
+PS C:\Users\chlhj\development-workstation> docker --version
+
+PS C:\Users\chlhj\development-workstation> docker info
+
+PS C:\Users\chlhj\development-workstation> git --version
+
+PS C:\Users\chlhj\development-workstation> code --version
+
+PS C:\Users\chlhj\development-workstation> docker run --rm hello-world
+
+PS C:\Users\chlhj\development-workstation> Get-Location
+
+Path
+----
+C:\Users\chlhj\development-workstation
+
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Force
+
+
+    디렉터리: C:\Users\chlhj\development-workstation
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      2026-11-12  오전 12:14                docs
+
+
+PS C:\Users\chlhj\development-workstation> New-Item -ItemType Directory -Path .\terminal-practice
+
+
+    디렉터리: C:\Users\chlhj\development-workstation
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      2026-11-12  오전 12:17                terminal-practice
+
+
+PS C:\Users\chlhj\development-workstation> Set-Location .\terminal-practice
+PS C:\Users\chlhj\development-workstation\terminal-practice> New-Item -ItemType File -Path .\empty.txt
+
+
+    디렉터리: C:\Users\chlhj\development-workstation\terminal-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-12  오전 12:18              0 empty.txt
+
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-ChildItem -Force
+
+
+    디렉터리: C:\Users\chlhj\development-workstation\terminal-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-12  오전 12:18              0 empty.txt
+
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> Set-Content -Path .\original.txt -Value "Hello, development workstation!" -Encoding utf8
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-Content .\original.txt
+Hello, development workstation!
+PS C:\Users\chlhj\development-workstation\terminal-practice> Copy-Item -Path .\original.txt -Destination .\copy.txt
+PS C:\Users\chlhj\development-workstation\terminal-practice> Rename-Item -Path .\copy.txt -NewName renamed.txt
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-ChildItem -Force
+
+
+    디렉터리: C:\Users\chlhj\development-workstation\terminal-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-12  오전 12:18              0 empty.txt
+-a----      2026-11-12  오전 12:19             36 original.txt
+-a----      2026-11-12  오전 12:19             36 renamed.txt
+
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-Content .\renamed.txt
+Hello, development workstation!
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-ChildItem -Name
+empty.txt
+original.txt
+renamed.txt
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-Content .\renamed.txt
+Hello, development workstation!
+PS C:\Users\chlhj\development-workstation\terminal-practice> New-Item -ItemType Directory -Path .\archive
+
+
+    디렉터리: C:\Users\chlhj\development-workstation\terminal-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      2026-11-12  오전 12:23                archive
+
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> Move-Item -Path .\renamed.txt -Destination .\archive\
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-ChildItem -Name
+archive
+empty.txt
+original.txt
+PS C:\Users\chlhj\development-workstation\terminal-practice> Get-ChildItem .\archive -Name
+renamed.txt
+PS C:\Users\chlhj\development-workstation\terminal-practice> Remove-Item -Path .\archive\renamed.txt
+PS C:\Users\chlhj\development-workstation\terminal-practice> Test-Path .\archive\renamed.txt
+False
+PS C:\Users\chlhj\development-workstation\terminal-practice> Test-Path .\original.txt
+True
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker run -it --name workstation-ubuntu ubuntu:24.04 bash
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker ps -a --filter "name=workstation-ubuntu"
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker start workstation-ubuntu
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker ps --filter "name=workstation-ubuntu"
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker exec -it workstation-ubuntu bash
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker ps --filter "name=workstation-ubuntu"
+
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker exec workstation-ubuntu bash -c 'cd /tmp/permission-practice && echo BEFORE && stat -c "%a %A %n" sample.txt sample-dir && chmod 600 sample.txt && chmod 700 sample-dir && echo AFTER && stat -c "%a %A %n" sample.txt sample-dir && chmod 644 sample.txt && chmod 755 sample-dir && echo RESTORED && stat -c "%a %A %n" sample.txt sample-dir' 2>&1 | Tee-Object -FilePath ..\docs\permissions.txt
+BEFORE
+docker : stat: missing operand
+위치 줄:1 문자:1
++ docker exec workstation-ubuntu bash -c 'cd /tmp/permission-practice & ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stat: missing operand:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Try 'stat --help' for more information.
+PS C:\Users\chlhj\development-workstation\terminal-practice> docker exec workstation-ubuntu bash -c 'cd /tmp/permission-practice && echo BEFORE && stat -c %a:%A:%n sample.txt sample-dir && chmod 600 sample.txt && chmod 700 sample-dir && echo AFTER && stat -c %a:%A:%n sample.txt sample-dir && chmod 644 sample.txt && chmod 755 sample-dir && echo RESTORED && stat -c %a:%A:%n sample.txt sample-dir' 2>&1 | Tee-Object -FilePath ..\docs\permissions.txt
+BEFORE
+644:-rw-r--r--:sample.txt
+755:drwxr-xr-x:sample-dir
+AFTER
+600:-rw-------:sample.txt
+700:drwx------:sample-dir
+RESTORED
+644:-rw-r--r--:sample.txt
+755:drwxr-xr-x:sample-dir
+PS C:\Users\chlhj\development-workstation\terminal-practice> Set-Location ..
+PS C:\Users\chlhj\development-workstation> code .
+
+PS C:\Users\chlhj\development-workstation> Set-Location "$HOME\development-workstation"
+PS C:\Users\chlhj\development-workstation> docker build -t workstation-web:1.0 .
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Path . -Recurse -Force -File -Filter "*Dockerfile*" | Select-Object FullName
+PS C:\Users\chlhj\development-workstation> FROM nginx:1.28-alpine
+위치 줄:1 문자:1
++ FROM nginx:1.28-alpine
++ ~~~~
+'from' 키워드는 이 언어 버전에서 지원되지 않습니다.
+위치 줄:1 문자:1
++ FROM nginx:1.28-alpine
++ ~~~~
+'from' 키워드는 이 언어 버전에서 지원되지 않습니다.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : ReservedKeywordNotAllowed
+
+PS C:\Users\chlhj\development-workstation> COPY app/ /usr/share/nginx/html/
+COPY : 'C:\Users\chlhj\development-workstation\app\' 경로는 존재하지 않으므로 찾을 수 없습니다.
+위치 줄:1 문자:1
++ COPY app/ /usr/share/nginx/html/
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\chlhj\...orkstation\app\:String) [Copy-Item], ItemNotFoundExcept
+ion
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.CopyItemCommand
+COPY : 'C:\Users\chlhj\development-workstation\app\' 경로는 존재하지 않으므로 찾을 수 없습니다.
+위치 줄:1 문자:1
++ COPY app/ /usr/share/nginx/html/
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\chlhj\...orkstation\app\:String) [Copy-Item], ItemNotFoundExce
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.CopyItemCommand
+
+PS C:\Users\chlhj\development-workstation> EXPOSE 80docker build -t workstation-web:1.0 .
+EXPOSE : 'EXPOSE' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는 프로그램 이름으로 인식되지 않습니다. 이름이 정확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시 시
+도하십시오.
+위치 줄:1 문자:1
++ EXPOSE 80docker build -t workstation-web:1.0 .
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (EXPOSE:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+EXPOSE : 'EXPOSE' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는 프로그램 이름으로 인식되지 않습니다. 이름이 정
+확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시 시도하십시오.
+위치 줄:1 문자:1
++ EXPOSE 80docker build -t workstation-web:1.0 .
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (EXPOSE:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\chlhj\development-workstation> docker build -t workstation-web:1.0 .
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Path . -Recurse -Force -File -Filter "*Dockerfile*" | Select-Object FullNameGet-ChildItem -Path . -Recurse -Force -File -Filter "*Dockerfile*" | Select-Object FullName
+>> 종료 오류(Select-Object): "매개 변수 이름 'Path'과(와) 일치하는 매개 변수를 찾을 수 없습니다."
+Select-Object : 매개 변수 이름 'Path'과(와) 일치하는 매개 변수를 찾을 수 없습니다.
+위치 줄:1 문자:106
++ ... er "*Dockerfile*" | Select-Object FullNameGet-ChildItem -Path . -Recu ...
++                                                             ~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Select-Object], ParameterBindingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Commands.SelectObjectCommand
+Select-Object : 매개 변수 이름 'Path'과(와) 일치하는 매개 변수를 찾을 수 없습니다.
+위치 줄:1 문자:106
++ ... er "*Dockerfile*" | Select-Object FullNameGet-ChildItem -Path . -Recu ...
++                                                             ~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Select-Object], ParameterBindingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Commands.SelectObjectCommand
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Path . -Recurse -Force -File -Filter "*Dockerfile*" | Select-Object FullName
+
+FullName
+--------
+C:\Users\chlhj\development-workstation\add\dockerfile
+
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Path . -Recurse -Force -File -Filter "*Dockerfile*" | Select-Object FullName
+
+FullName
+--------
+C:\Users\chlhj\development-workstation\add\dockerfile
+
+
+PS C:\Users\chlhj\development-workstation> Set-Location "$HOME\development-workstation"
+PS C:\Users\chlhj\development-workstation> docker build -t workstation-web:1.0 .
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Force | Select-Object Mode, Name
+
+Mode   Name
+----   ----
+d----- add
+d----- dockerfile
+d----- docs
+d----- terminal-practice
+
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Path .\dockerfile, .\add -Recurse -Force | Select-Object Mode, FullName
+
+Mode   FullName
+----   --------
+-a---- C:\Users\chlhj\development-workstation\dockerfile\Untitled-1.txt
+-a---- C:\Users\chlhj\development-workstation\add\index.html
+
+
+PS C:\Users\chlhj\development-workstation> Rename-Item -Path .\add -NewName app
+PS C:\Users\chlhj\development-workstation> Rename-Item -Path .\dockerfile -NewName dockerfile-backup
+PS C:\Users\chlhj\development-workstation> Move-Item -Path .\dockerfile-backup\Untitled-1.txt -Destination .\Dockerfile
+PS C:\Users\chlhj\development-workstation> Get-Content .\Dockerfile
+FROM nginx:1.28-alpine
+COPY app/ /usr/share/nginx/html/
+EXPOSE 80
+PS C:\Users\chlhj\development-workstation> FROM nginx:1.28-alpine
+위치 줄:1 문자:1
++ FROM nginx:1.28-alpine
++ ~~~~
+'from' 키워드는 이 언어 버전에서 지원되지 않습니다.
+위치 줄:1 문자:1
++ FROM nginx:1.28-alpine
++ ~~~~
+'from' 키워드는 이 언어 버전에서 지원되지 않습니다.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : ReservedKeywordNotAllowed
+
+PS C:\Users\chlhj\development-workstation> COPY app/ /usr/share/nginx/html/
+PS C:\Users\chlhj\development-workstation> EXPOSE 80docker build -t workstation-web:1.0 .
+EXPOSE : 'EXPOSE' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는 프로그램 이름으로 인식되지 않습니다. 이름이 정확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시 시
+도하십시오.
+위치 줄:1 문자:1
++ EXPOSE 80docker build -t workstation-web:1.0 .
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (EXPOSE:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+EXPOSE : 'EXPOSE' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는 프로그램 이름으로 인식되지 않습니다. 이름이 정
+확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시 시도하십시오.
+위치 줄:1 문자:1
++ EXPOSE 80docker build -t workstation-web:1.0 .
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (EXPOSE:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\chlhj\development-workstation> docker build -t workstation-web:1.0 .
+
+PS C:\Users\chlhj\development-workstation> docker images workstation-web
+
+PS C:\Users\chlhj\development-workstation> docker run -d --name workstation-web -p 8080:80 workstation-web:1.0
+
+PS C:\Users\chlhj\development-workstation> docker rm workstation-web
+
+PS C:\Users\chlhj\development-workstation> docker run -d --name workstation-web -p 8082:80 workstation-web:1.0
+
+PS C:\Users\chlhj\development-workstation> docker ps --filter "name=workstation-web"
+
+PS C:\Users\chlhj\development-workstation> docker logs --tail 30 workstation-web
+
+PS C:\Users\chlhj\development-workstation> docker stats --no-stream workstation-web
+
+PS C:\Users\chlhj\development-workstation> docker run -d --name workstation-bind -p 8083:80 --mount "type=bind,source=$($PWD.Path)\app,target=/usr/share/nginx/html,readonly" workstation-web:1.0
+
+PS C:\Users\chlhj\development-workstation> curl.exe -sS http://localhost:8083/ | Tee-Object -FilePath .\docs\bind-before.txt
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>媛쒕컻 ?뚰겕?ㅽ뀒?댁뀡</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 24px;
+      background: #152033;
+      color: #ffffff;
+    }
+    h1 { color: #7ee0b8; }
+  </style>
+</head>
+<body>
+  <h1>媛쒕컻 ?뚰겕?ㅽ뀒?댁뀡 援ъ텞 ?꾨즺</h1>
+  <p>Dockerfile濡?留뚮뱺 NGINX ???쒕쾭?낅땲??</p>
+  <p>肄섑뀗痢?踰꾩쟾: BEFORE</p>
+</body>
+</html>
+PS C:\Users\chlhj\development-workstation> curl.exe -sS -o .\docs\bind-before.txt http://localhost:8083/
+
+PS C:\Users\chlhj\development-workstation> Get-Content -Path .\docs\bind-before.txt -Encoding UTF8
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개발 워크스테이션</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 24px;
+      background: #152033;
+      color: #ffffff;
+    }
+    h1 { color: #7ee0b8; }
+  </style>
+</head>
+<body>
+  <h1>개발 워크스테이션 구축 완료</h1>
+  <p>Dockerfile로 만든 NGINX 웹 서버입니다.</p>
+  <p>콘텐츠 버전: BEFORE</p>
+</body>
+</html>
+PS C:\Users\chlhj\development-workstation> code "$HOME\development-workstation\app\index.html"
+
+PS C:\Users\chlhj\development-workstation> curl.exe -sS -o .\docs\bind-after.txt http://localhost:8083/
+
+PS C:\Users\chlhj\development-workstation> Get-Content -Path .\docs\bind-after.txt -Encoding UTF8 | Select-String "콘텐츠 버전"
+
+  <p>콘텐츠 버전:  AFTER</p>
+
+
+PS C:\Users\chlhj\development-workstation> docker volume create workstation-data
+
+PS C:\Users\chlhj\development-workstation> docker run --name workstation-volume-before --mount type=volume,source=workstation-data,target=/data ubuntu:24.04 bash -c 'echo persistent-data-2026 > /data/proof.txt && cat /data/proof.txt && sha256sum /data/proof.txt' | Tee-Object -FilePath .\docs\volume-before.txt
+persistent-data-2026
+20bc7f40a4da2551951210b944481ba95495fdd576565f9252cb41da2e3842e4  /data/proof.txt
+PS C:\Users\chlhj\development-workstation> docker rm workstation-volume-before
+
+PS C:\Users\chlhj\development-workstation> docker run --name workstation-volume-after --mount type=volume,source=workstation-data,target=/data ubuntu:24.04 bash -c 'cat /data/proof.txt && sha256sum /data/proof.txt' | Tee-Object -FilePath .\docs\volume-after.txt
+persistent-data-2026
+20bc7f40a4da2551951210b944481ba95495fdd576565f9252cb41da2e3842e4  /data/proof.txt
+PS C:\Users\chlhj\development-workstation> git init -b main
+
+PS C:\Users\chlhj\development-workstation> git config --global init.defaultBranch main
+
+PS C:\Users\chlhj\development-workstation> git config --local user.name "perfumeish"
+
+PS C:\Users\chlhj\development-workstation> git config --local user.email "[EMAIL_REDACTED]"
+
+PS C:\Users\chlhj\development-workstation> git config --list | Tee-Object -FilePath .\docs\git-config.txt
+diff.astextplain.textconv=astextplain
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+http.sslbackend=schannel
+core.autocrlf=true
+core.fscache=true
+core.symlinks=false
+pull.rebase=false
+credential.helper=manager
+credential.https://dev.azure.com.usehttppath=true
+init.defaultbranch=master
+user.name=?꾩긽??user.email=[EMAIL_REDACTED]
+init.defaultbranch=main
+core.repositoryformatversion=0
+core.filemode=false
+core.bare=false
+core.logallrefupdates=true
+core.symlinks=false
+core.ignorecase=true
+user.name=perfumeish
+user.email=[EMAIL_REDACTED]
+PS C:\Users\chlhj\development-workstation> git config --local user.email "[EMAIL_REDACTED]"
+
+PS C:\Users\chlhj\development-workstation> git config --local --get user.email
+
+PS C:\Users\chlhj\development-workstation> git config --local --list | Set-Content -Path .\docs\git-config.txt -Encoding UTF8
+PS C:\Users\chlhj\development-workstation> git config --get init.defaultBranch | ForEach-Object { "init.defaultBranch=$_" } | Add-Content -Path .\docs\git-config.txt -Encoding UTF8
+PS C:\Users\chlhj\development-workstation> Get-Content .\docs\git-config.txt | Select-String 'init.defaultBranch'
+
+init.defaultBranch=main
+
+
+PS C:\Users\chlhj\development-workstation> git status --short --untracked-files=all
+
+PS C:\Users\chlhj\development-workstation> Get-ChildItem -Path . -Recurse -Force -Filter "*gitignore*" | Select-Object Mode, FullName
+
+Mode   FullName
+----   --------
+d----- C:\Users\chlhj\development-workstation\gitignore
+
+
+PS C:\Users\chlhj\development-workstation> Set-Content -Path .\.gitignore -Value @('docs/terminal-log.txt', '.env', '.env.*', '*.pem', '*.key') -Encoding UTF8
+PS C:\Users\chlhj\development-workstation> git status --short --untracked-files=all
+
+PS C:\Users\chlhj\development-workstation> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261112022211
+**********************
+

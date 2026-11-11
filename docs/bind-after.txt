@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개발 워크스테이션</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 24px;
+      background: #152033;
+      color: #ffffff;
+    }
+    h1 { color: #7ee0b8; }
+  </style>
+</head>
+<body>
+  <h1>개발 워크스테이션 구축 완료</h1>
+  <p>Dockerfile로 만든 NGINX 웹 서버입니다.</p>
+  <p>콘텐츠 버전:  AFTER</p>
+</body>
+</html>

@@ -1,0 +1,5 @@
+﻿docs/terminal-log.txt
+.env
+.env.*
+*.pem
+*.key

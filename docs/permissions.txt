@@ -1,0 +1,11 @@
+﻿BEFORE
+644:-rw-r--r--:sample.txt
+755:drwxr-xr-x:sample-dir
+AFTER
+600:-rw-------:sample.txt
+700:drwx------:sample-dir
+RESTORED
+644:-rw-r--r--:sample.txt
+755:drwxr-xr-x:sample-dir
+
+
