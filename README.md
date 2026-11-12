@@ -540,7 +540,10 @@ Bind for 0.0.0.0:8080 failed: port is already allocated
 
 - 원인 가설: 다른 컨테이너나 프로그램이 8080번 포트를 사용 중이라고 판단했습니다.
 - 확인: Docker 오류에서 8080번 포트 할당 충돌을 확인했습니다.
-  점유한 프로그램의 정체는 별도로 확인하지 않았습니다.
+최초 장애 당시에는 포트 변경으로 복구했습니다.
+이후 별도 재현 실습에서 점유 컨테이너와 Windows 프로세스를 식별하고,
+컨테이너 중지로 포트를 해제한 뒤 같은 포트의 재사용을 검증했습니다.
+자세한 명령과 결과는 아래 추가 검증에 기록했습니다.
 - 해결: 기존 서비스를 유지하고, 실패한 컨테이너를 삭제한 뒤 8082번으로 실행했습니다.
 
 ```powershell
@@ -691,3 +694,126 @@ origin  https://github.com/perfumeish/development-workctation.git (push)
 
 ![VSCode에서 GitHub 원격 저장소 연동 확인](docs/vscode-github-remote.png)
 
+
+
+## 추가 검증: 포트 충돌 진단·해제·재사용
+
+최초 장애와 별도로 실습용 컨테이너를 만들어 충돌을 재현했습니다.
+
+[전체 명령 및 실제 출력 로그](docs/port-conflict-verification.txt)
+
+### 1. 점유 컨테이너 확인
+
+```powershell
+docker run -d --name workstation-port-owner -p 8080:80 workstation-web:1.0
+docker ps --filter "publish=8080" --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}"
+```
+
+결과:
+
+```text
+9a6e6cb51330   workstation-port-owner   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+```
+
+### 2. Windows 점유 프로세스 확인
+
+```powershell
+Get-NetTCPConnection -LocalPort 8080 -State Listen |
+    Select-Object LocalAddress, LocalPort, OwningProcess
+
+Get-Process -Id 10696,30136 | Select-Object Id, ProcessName
+```
+
+결과:
+
+```text
+LocalAddress LocalPort OwningProcess
+::1               8080         10696
+::                8080         30136
+127.0.0.1         8080         10696
+
+Id    ProcessName
+30136 com.docker.backend
+10696 wslrelay
+```
+
+PID는 조회 시점마다 달라질 수 있습니다.
+Docker·WSL 전달 프로세스를 강제 종료하지 않고,
+포트를 공개한 실습용 컨테이너를 중지하는 방법을 선택했습니다.
+
+### 3. 충돌 재현
+
+```powershell
+docker run -d --name workstation-port-conflict -p 8080:80 workstation-web:1.0
+```
+
+예상한 충돌 오류가 발생했습니다.
+
+```text
+Bind for 0.0.0.0:8080 failed: port is already allocated
+```
+
+### 4. 포트 해제 확인
+
+```powershell
+docker stop workstation-port-owner
+
+Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue |
+    Select-Object LocalAddress, LocalPort, OwningProcess
+```
+
+결과: 점유 컨테이너가 중지됐고, 수신 항목이 출력되지 않았습니다.
+
+### 5. 같은 포트 재사용
+
+충돌로 실패한 컨테이너를 다시 시작했으나 HTTP 연결에 실패했습니다.
+`docker ps -a`에서 Up 상태였지만 PORTS에는 `80/tcp`만 표시됐습니다.
+호스트 포트 매핑이 확인되지 않아 실습 컨테이너를 삭제하고 새로 생성했습니다.
+
+```powershell
+docker rm -f workstation-port-conflict
+docker run -d --name workstation-port-recovered -p 8080:80 workstation-web:1.0
+docker port workstation-port-recovered
+curl.exe -I http://127.0.0.1:8080/
+```
+
+결과:
+
+```text
+80/tcp -> 0.0.0.0:8080
+80/tcp -> [::]:8080
+
+HTTP/1.1 200 OK
+Server: nginx/1.28.3
+Content-Type: text/html
+Content-Length: 591
+```
+
+점유 대상 식별, 충돌 재현, 컨테이너 중지로 포트 해제,
+새 컨테이너의 포트 매핑 및 HTTP 200 응답까지 확인했습니다.
+
+### 포트 충돌 대응 절차
+
+1. `docker ps`로 포트를 공개한 컨테이너를 확인합니다.
+2. `Get-NetTCPConnection`과 `Get-Process`로 Windows의 수신 PID와 프로세스 이름을 확인합니다.
+3. 중지 가능한 컨테이너라면 `docker stop <컨테이너명>`으로 종료합니다.
+4. 일반 프로그램이라면 작업을 저장하고 해당 프로그램의 정상 종료 기능을 사용합니다.
+5. 포트가 해제됐는지 확인한 뒤 필요한 컨테이너를 실행하거나 재생성합니다.
+6. 기존 서비스를 유지해야 한다면 다른 호스트 포트를 선택합니다.
+7. `docker port`와 HTTP 응답으로 복구를 검증합니다.
+
+### 포트 충돌 보완 증거 파일
+
+PowerShell 기록에서 일부 외부 명령 출력이 누락되어,
+`2>&1 | Tee-Object`로 해당 출력을 별도 파일에 저장했습니다.
+
+- [포트 점유 컨테이너·Windows PID 및 프로세스 확인](docs/port-conflict-verification.txt)
+- [8080번 포트 충돌 오류](docs/port-conflict-error.txt)
+- [복구 컨테이너의 8080 → 80 포트 매핑](docs/port-recovery-mapping.txt)
+- [컨테이너 중지 및 PORT_8080_RELEASED 확인](docs/port-release.txt)
+- [동일 컨테이너 재시작 결과](docs/port-restart.txt)
+- [재시작 후 HTTP 200 응답](docs/port-recovery-http.txt)
+
+추가 확인에서는 `workstation-port-recovered`를 중지한 뒤
+8080번 포트의 수신 항목이 사라졌음을 확인했습니다.
+이후 같은 컨테이너를 재시작하여 HTTP 200 응답을 다시 확인했습니다.

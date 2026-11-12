@@ -1,0 +1,4 @@
+53d9fc4b22fdf37caed335b0eabeb6b7e57c075c45e56acd352351e1631e8759
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint workstation-port-conflict-evidence (47d5625a8e2d098212a042cd981aa42a737427255d6ed6b99fcc0956910e922c): Bind for 0.0.0.0:8080 failed: port is already allocated
+
+Run 'docker run --help' for more information

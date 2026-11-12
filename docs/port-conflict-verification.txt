@@ -1,0 +1,64 @@
+**********************
+PowerShell 기록 시작
+시작 시간: 20261112161129
+사용자 이름: LAPTOP-VRA0FQT7\Isac_Jung
+실행 사용자: LAPTOP-VRA0FQT7\Isac_Jung
+구성 이름: 
+컴퓨터: LAPTOP-VRA0FQT7 (Microsoft Windows NT 10.0.26200.0)
+호스트 애플리케이션: C:\Program Files\PowerShell\7\pwsh.dll -WorkingDirectory ~
+프로세스 ID: 47128
+PSVersion: 7.6.10
+PSEdition: Core
+GitCommitId: 7.6.10
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+대화 내용 기록이 시작되었습니다. 출력 파일은 C:\Users\chlhj\development-workstation\docs\port-conflict-verification.txt입니다.
+PS C:\Users\chlhj> docker run -d --name workstation-port-owner -p 8080:80 workstation-web:1.0
+9a6e6cb51330b82b4e516ca2622f92303d5ecfe7f9dbbd5723c40f685b2c54d2
+PS C:\Users\chlhj> docker ps --filter "publish=8080" --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}"
+CONTAINER ID   NAMES                    PORTS
+9a6e6cb51330   workstation-port-owner   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+PS C:\Users\chlhj> Get-NetTCPConnection -LocalPort 8080 -State Listen | Select-Object LocalAddress, LocalPort, OwningProcess
+
+LocalAddress LocalPort OwningProcess
+------------ --------- -------------
+::1               8080         10696
+::                8080         30136
+127.0.0.1         8080         10696
+
+PS C:\Users\chlhj> Get-Process -Id 10696,30136 | Select-Object Id, ProcessName
+
+   Id ProcessName
+   -- -----------
+30136 com.docker.backend
+10696 wslrelay
+
+PS C:\Users\chlhj> docker run -d --name workstation-port-conflict -p 8080:80 workstation-web:1.0
+
+PS C:\Users\chlhj> docker stop workstation-port-owner
+
+PS C:\Users\chlhj> Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalAddress, LocalPort, OwningProcess
+PS C:\Users\chlhj> docker start workstation-port-conflict
+
+PS C:\Users\chlhj> curl.exe -I http://localhost:8080/
+
+PS C:\Users\chlhj> docker ps -a --filter "name=workstation-port-conflict"
+
+PS C:\Users\chlhj> docker rm -f workstation-port-conflict
+
+PS C:\Users\chlhj> docker run -d --name workstation-port-recovered -p 8080:80 workstation-web:1.0
+
+PS C:\Users\chlhj> docker port workstation-port-recovered
+
+PS C:\Users\chlhj> curl.exe -I http://127.0.0.1:8080/
+
+PS C:\Users\chlhj> Stop-Transcript
+**********************
+PowerShell 기록 끝
+종료 시간: 20261112161839
+**********************
